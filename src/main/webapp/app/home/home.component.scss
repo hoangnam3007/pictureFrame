@@ -1,23 +1,177 @@
-/* ==========================================================================
-Main page styles
-========================================================================== */
-
-.hipster {
-  display: inline-block;
-  width: 347px;
-  height: 497px;
-  background: url('../../content/images/jhipster_family_member_1.svg') no-repeat center top;
-  background-size: contain;
+/* Background color for the .bg-holder */
+.bg-holder {
+  background-color: transparent;
+  /* Set background to transparent if there's interference */
+  margin-bottom: 144px;
 }
 
-/* wait autoprefixer update to allow simple generation of high pixel density media query */
-@media only screen and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (-moz-min-device-pixel-ratio: 2),
-  only screen and (-o-min-device-pixel-ratio: 2/1),
-  only screen and (min-resolution: 192dpi),
-  only screen and (min-resolution: 2dppx) {
-  .hipster {
-    background: url('../../content/images/jhipster_family_member_1.svg') no-repeat center top;
-    background-size: contain;
-  }
+/* Other styles */
+.custom-heading {
+  color: #e04826;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 20.25px;
+  font-weight: 700;
+  line-height: 24.3px;
+  margin-bottom: 28.8px;
+  text-align: left;
+}
+
+.hero-title {
+  color: #212d40;
+  font-size: 66px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 88px;
+  text-align: left;
+}
+
+.frame-keyword {
+  color: #212d40;
+  display: inline-block;
+  font-size: 80px;
+  letter-spacing: -2px;
+  line-height: 88px;
+  margin-left: 4px;
+  font-family: 'Caveat Brush', cursive;
+}
+
+/* Styling for buttons */
+.btn-primary {
+  background-color: #cf2d0c;
+  border-color: #cf2d0c;
+  border: none;
+  margin-right: 10px;
+  border-radius: 800px;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: #cf2d0c80 0px 0px 0px 0px;
+  color: #fffefe;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 14px;
+  margin: 0px 16px 0px 0px;
+  padding: 14px 48px;
+  text-align: center;
+  text-transform: uppercase;
+  width: 200px;
+  height: 44px;
+}
+
+.btn-secondary {
+  border-color: #212d40;
+  border-radius: 800px;
+  border-style: solid;
+  border-width: 1px;
+  color: #212d40;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700 !important;
+  line-height: 14px;
+  margin: 0px 28.8px 0px 0px;
+  padding: 14px 64px;
+  text-align: center;
+  text-transform: uppercase;
+  height: 44px;
+  width: 207px;
+}
+
+/* Section Styles */
+#category {
+  padding-top: 20px;
+  background-color: #fffcf5;
+}
+
+/* Header Styles */
+.module-type {
+  font-weight: bold;
+  color: #e04826;
+  font-size: 20.2501px;
+  font-family: Google Sans;
+  font-weight: 700px;
+  line-height: 24, 3001px;
+  margin: 0px 0px 8px;
+}
+
+.module-title {
+  font-family: 'Mynerve', cursive;
+  font-size: 58.4518px;
+  font-weight: bold;
+  letter-spacing: -1.16904px;
+  line-height: 60px;
+  color: #14183e;
+  margin: 0px 0px 16px;
+}
+
+.module-description {
+  font-size: 14px;
+  color: #212d40;
+  line-height: 20px;
+  margin: 0px 0px 16px;
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+}
+
+.category-card .card-body {
+  border-radius: 20px;
+  height: 279px;
+}
+
+/* Card Styles */
+.category-card {
+  border: 1px solid #3f3f3f40;
+  box-shadow: 0px 24px 40px -12px #bababa40;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #212d40;
+  position: relative;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Category Icon */
+.category-img {
+  width: 75px;
+  margin-bottom: 10px;
+}
+
+/* Category Number */
+.category-number {
+  font-family: 'Caveat Brush', cursive;
+  font-size: 24px;
+  color: #e04826;
+}
+
+/* Category Title */
+h4 {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 20px;
+  color: #212d40;
+}
+
+/* Category Description */
+.category-description {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Button Styles */
+.btn-try {
+  background-color: #e04826;
+  color: #fff;
+  padding: 5px 15px;
+  border-radius: 50px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.btn-try:hover {
+  background-color: #cf2d0c;
 }

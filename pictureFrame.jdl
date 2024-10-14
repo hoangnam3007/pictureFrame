@@ -1,0 +1,47 @@
+enum FrameType {
+  PRIVATE,
+  PUBLIC,
+  RESTRICTED
+}
+
+entity Frame {
+    title String required,
+    type FrameType required,
+    description TextBlob,
+    guidelineUrl String,
+    imagePath String required,
+    usageCount Integer,
+    createdAt Instant,
+    updatedAt Instant
+}
+
+entity Transaction {
+    usedAt Instant
+}
+
+entity Advertisement {
+    brand String required,
+    imagePath String required,
+    redirectUrl String required,
+    active Boolean required,
+    createdAt Instant,
+    updatedAt Instant
+}
+
+entity Category {
+    name String required,
+    description TextBlob
+}
+
+relationship ManyToOne {
+    Frame{creator(login)} to User{frame} with builtInEntity,
+    Transaction{frame} to Frame,
+    Transaction{user(login)} to User{transaction} with builtInEntity
+}
+
+relationship OneToMany {
+    User{frames} to Frame{creator} with builtInEntity
+}
+
+dto Frame, Transaction, Advertisement, Category with mapstruct
+paginate Frame, Transaction, Advertisement, Category with pagination

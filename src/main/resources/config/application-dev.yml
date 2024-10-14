@@ -32,19 +32,20 @@ spring:
       indent-output: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev, faker
+    contexts: dev
     url: jdbc:mysql://localhost:3306/pictureFrame?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.gmail.com
+    port: 587
+    username: Namhx0703@gmail.com #Replace this field with your Gmail username.
+    password: satwfiyyleruqijl #Replace this field with your Gmail password/App password.
+    protocol: smtp
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   r2dbc:
     url: r2dbc:mysql://localhost:3306/pictureFrame?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root
-    password:
+    password: Nam@2003
   thymeleaf:
     cache: false
 
