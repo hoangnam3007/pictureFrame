@@ -8,7 +8,10 @@
       "entities": {
         "main": "Entities",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "adminAuthority": "Authority"
+        "advertisement": "Advertisement",
+        "category": "Category",
+        "frame": "Frame",
+        "transaction": "Transaction"
       },
       "account": {
         "main": "Account",
@@ -143,6 +146,13 @@
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
+  },
+
+  "remove-background": {
+    "title": "Remove BackGround"
+  },
+  "compress-image": {
+    "title": "compress-image"
   },
   "footer": "This is your footer"
 }

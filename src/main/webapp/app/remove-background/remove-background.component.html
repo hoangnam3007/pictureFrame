@@ -1,0 +1,77 @@
+<!-- Image Upload Section (only visible when image isn't uploaded) -->
+<div class="container remove-bg-container mt-3" style="margin-top: 100px" *ngIf="!imageUploaded">
+  <div class="row remove-bg-start px-3 mx-0">
+    <!-- Left section (Image and Title) -->
+    <div class="col-md-6 remove-bg-title text-center">
+      <img src="https://khunghinh.net/img/tool/rmbg_3.png" class="img-fluid mx-auto d-block" alt="Image to remove background" />
+      <h1 class="title text-center py-4">Xóa nền hình ảnh</h1>
+    </div>
+
+    <!-- Right section (File upload area) -->
+    <div class="col-md-6 remove-bg-form">
+      <div class="remove-bg-area py-6 text-center">
+        <!-- Hidden File Input -->
+        <input type="file" #fileInput accept="image/*" style="display: none" (change)="onChoosePhoto($event)" />
+
+        <!-- Button to trigger the file input click -->
+        <button class="btn btn-primary rounded-pill btn-upload-image d-block mx-auto" (click)="fileInput.click()">Chọn Hình</button>
+
+        <!-- Display error message -->
+        <span class="waiting-text text-center pt-3 d-block">Hỗ trợ định dạng hình JPG/PNG và dung lượng tối đa là 5MB!</span>
+
+        <!-- Display error message if there is one -->
+        <div *ngIf="errorMessage" class="alert alert-danger mt-2">{{ errorMessage }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Inserted Demo Section -->
+<div class="pt-6 rm-bg-demo">
+  <h2 class="fs-5 fw-bold text-center">Chất lượng kết quả</h2>
+  <div class="twentytwenty-wrapper twentytwenty-horizontal">
+    <div class="mt-5 rm-bg-demo-area twentytwenty-container">
+      <div class="image-container">
+        <img class="img-demo-src twentytwenty-before" src="https://khunghinh.net/img/tool/rmbg_demo_result_1.png" alt="Demo Image" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Result Section (only visible when image is uploaded and processed) -->
+<div class="row align-items-center mt-5" *ngIf="imageUploaded">
+  <div class="col-md-6">
+    <h2 class="fs-5 fw-bold text-center">Kết quả hình ảnh</h2>
+    <img [src]="originalImagePath" class="img-fluid" alt="Original Image" />
+    <h2 class="fs-5 fw-bold text-center mt-3">Hình ảnh đã xóa nền</h2>
+    <img [src]="removedImagePath" class="img-fluid" alt="Background Removed Image" />
+  </div>
+  <div class="col-md-6">
+    <button class="btn btn-secondary" (click)="tryAnotherImage()">Thử lại hình khác</button>
+  </div>
+</div>
+
+<!-- Additional Information Section -->
+<div class="row align-items-center mt-5">
+  <div class="col-md-5 order-md-0 text-center text-md-start">
+    <div class="image-container">
+      <img
+        class="img-fluid mb-4"
+        src="https://khunghinh.net/img/tool/zframe-designer-working-happily.png"
+        width="460px"
+        height="460px"
+        alt="Tách nền khỏi hình ảnh"
+      />
+    </div>
+  </div>
+  <div class="col-md-6 text-center text-md-start offset-md-1">
+    <h6 class="fw-bold fs-4 display-3 lh-sm">
+      Tách nền khỏi hình ảnh <br />
+      tự động và đơn giản
+    </h6>
+    <p class="my-4 pe-xl-5">
+      Với hình ảnh được tách nền, chúng ta có thể tự do sáng tạo hơn nữa để có được những kết quả tuyệt vời. Hệ thống tự động xử lý và chỉ
+      lưu trữ hình bạn đăng tải trong vòng 60 phút.
+    </p>
+  </div>
+</div>

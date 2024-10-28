@@ -1,0 +1,10 @@
+{
+  "pictureFrameApp": {
+    "FrameType": {
+      "null": "",
+      "PRIVATE": "PRIVATE",
+      "PUBLIC": "PUBLIC",
+      "RESTRICTED": "RESTRICTED"
+    }
+  }
+}

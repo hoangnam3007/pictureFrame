@@ -1,0 +1,32 @@
+{
+  "pictureFrameApp": {
+    "frame": {
+      "home": {
+        "title": "Frames",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Frame",
+        "createOrEditLabel": "Create or edit a Frame",
+        "notFound": "No Frames found"
+      },
+      "created": "A new Frame is created with identifier {{ param }}",
+      "updated": "A Frame is updated with identifier {{ param }}",
+      "deleted": "A Frame is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Frame {{ id }}?"
+      },
+      "detail": {
+        "title": "Frame"
+      },
+      "id": "ID",
+      "title": "Title",
+      "type": "Type",
+      "description": "Description",
+      "guidelineUrl": "Guideline Url",
+      "imagePath": "Image Path",
+      "usageCount": "Usage Count",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "creator": "Creator"
+    }
+  }
+}

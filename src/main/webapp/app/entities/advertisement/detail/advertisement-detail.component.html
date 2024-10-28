@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (advertisement(); as advertisementRef) {
+      <div>
+        <h2 data-cy="advertisementDetailsHeading"><span jhiTranslate="pictureFrameApp.advertisement.detail.title">Advertisement</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ advertisementRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.advertisement.brand">Brand</span></dt>
+          <dd>
+            <span>{{ advertisementRef.brand }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.advertisement.imagePath">Image Path</span></dt>
+          <dd>
+            <span>{{ advertisementRef.imagePath }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.advertisement.redirectUrl">Redirect Url</span></dt>
+          <dd>
+            <span>{{ advertisementRef.redirectUrl }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.advertisement.active">Active</span></dt>
+          <dd>
+            <span>{{ advertisementRef.active }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.advertisement.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ advertisementRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.advertisement.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ advertisementRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/advertisement', advertisementRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

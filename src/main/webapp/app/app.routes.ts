@@ -37,6 +37,17 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
   },
+  {
+    path: 'remove-background',
+    loadComponent: () => import('./remove-background/remove-background.component').then(m => m.RemoveBackgroundComponent),
+    title: 'remove-background.title',
+  },
+
+  {
+    path: 'compress-image',
+    loadComponent: () => import('./compress-image/compress-image.component').then(m => m.CompressImageComponent),
+    title: 'compress-image.title',
+  },
   ...errorRoute,
 ];
 

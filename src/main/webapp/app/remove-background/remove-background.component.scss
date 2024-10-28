@@ -1,0 +1,114 @@
+.remove-bg-container {
+  margin-top: 100px;
+}
+
+.remove-bg-title img {
+  width: 180px;
+  height: 180px;
+  margin: auto;
+  display: block;
+}
+
+.remove-bg-area {
+  background-image: url('https://khunghinh.net/img/pixel.png');
+  background-position: 50% 50%;
+  border-color: #0000001a;
+  border-radius: 15px;
+  border-style: dashed;
+  border-width: 2px;
+  color: #212d40;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 48px 30px;
+}
+
+.btn-upload-image {
+  align-items: flex-start;
+  background-color: #e04826;
+  border-color: #e04826;
+  border-radius: 800px;
+  border-style: solid;
+  border-width: 1px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 14px;
+  margin: 0px 181.812px 0px 181.797px;
+  padding: 14px 24px;
+  text-align: center;
+}
+
+.waiting-text {
+  font-size: 14px;
+  color: #666;
+}
+
+h1 {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #14183e;
+}
+
+@media (min-width: 1200px) {
+  h1,
+  .h1 {
+    font-size: 1.80203rem;
+  }
+}
+
+.twentytwenty-wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.twentytwenty-container {
+  height: 480px;
+}
+
+.image-container {
+  width: 720px;
+  height: 480px;
+}
+
+.img-demo-src {
+  width: 100%;
+  height: auto;
+}
+
+.align-items-center {
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .fw-bold {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #666;
+  }
+}
+
+.rm-bg-demo .twentytwenty-container {
+  background-image: url('https://khunghinh.net/img/pixel.png');
+  background-position: 50% 50%;
+  border-color: #e1eaed;
+  border-radius: 25px;
+  border-style: dashed;
+  border-width: 4px;
+  color: #212d40;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 40px 226px 0px;
+  width: 720px;
+  height: 490px;
+}
+
+.twentytwenty-wrapper {
+  margin-left: 80px;
+}

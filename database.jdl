@@ -1,7 +1,7 @@
 enum FrameType {
-  PRIVATE,
-  PUBLIC,
-  RESTRICTED
+    PRIVATE,
+    PUBLIC,
+    RESTRICTED
 }
 
 entity Frame {
@@ -34,13 +34,9 @@ entity Category {
 }
 
 relationship ManyToOne {
-    Frame{creator(login)} to User{frame} with builtInEntity,
+    Frame{creator(login)} to User with builtInEntity,
     Transaction{frame} to Frame,
-    Transaction{user(login)} to User{transaction} with builtInEntity
-}
-
-relationship OneToMany {
-    User{frames} to Frame{creator} with builtInEntity
+    Transaction{user(login)} to User with builtInEntity
 }
 
 dto Frame, Transaction, Advertisement, Category with mapstruct

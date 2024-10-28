@@ -51,7 +51,7 @@ public class SecurityConfiguration {
         http
             .securityMatcher(
                 new NegatedServerWebExchangeMatcher(
-                    new OrServerWebExchangeMatcher(pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**"))
+                    new OrServerWebExchangeMatcher(pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/images/temp/**"))
                 )
             )
             .cors(withDefaults())
@@ -78,6 +78,8 @@ public class SecurityConfiguration {
                     .pathMatchers("/api/authenticate").permitAll()
                     .pathMatchers("/api/register").permitAll()
                     .pathMatchers("/api/activate").permitAll()
+                    .pathMatchers("api/upload-image").permitAll()
+                    .pathMatchers("/images/temp/**").permitAll() // Allow access to images
                     .pathMatchers("/api/account/reset-password/init").permitAll()
                     .pathMatchers("/api/account/reset-password/finish").permitAll()
                     .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)

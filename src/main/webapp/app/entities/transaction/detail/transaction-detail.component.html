@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (transaction(); as transactionRef) {
+      <div>
+        <h2 data-cy="transactionDetailsHeading"><span jhiTranslate="pictureFrameApp.transaction.detail.title">Transaction</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ transactionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.transaction.usedAt">Used At</span></dt>
+          <dd>
+            <span>{{ transactionRef.usedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.transaction.frame">Frame</span></dt>
+          <dd>
+            @if (transaction()!.frame) {
+              <div>
+                <a [routerLink]="['/frame', transaction()!.frame?.id, 'view']">{{ transactionRef.frame?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.transaction.user">User</span></dt>
+          <dd>
+            <span>{{ transactionRef.user?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/transaction', transactionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

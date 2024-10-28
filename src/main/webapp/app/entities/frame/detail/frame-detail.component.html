@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (frame(); as frameRef) {
+      <div>
+        <h2 data-cy="frameDetailsHeading"><span jhiTranslate="pictureFrameApp.frame.detail.title">Frame</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ frameRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.title">Title</span></dt>
+          <dd>
+            <span>{{ frameRef.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.type">Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'pictureFrameApp.FrameType.' + (frameRef.type ?? 'null')">{{
+              { null: '', PRIVATE: 'PRIVATE', PUBLIC: 'PUBLIC', RESTRICTED: 'RESTRICTED' }[frameRef.type ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.description">Description</span></dt>
+          <dd>
+            <span>{{ frameRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.guidelineUrl">Guideline Url</span></dt>
+          <dd>
+            <span>{{ frameRef.guidelineUrl }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.imagePath">Image Path</span></dt>
+          <dd>
+            <span>{{ frameRef.imagePath }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.usageCount">Usage Count</span></dt>
+          <dd>
+            <span>{{ frameRef.usageCount }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ frameRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ frameRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="pictureFrameApp.frame.creator">Creator</span></dt>
+          <dd>
+            <span>{{ frameRef.creator?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/frame', frameRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
