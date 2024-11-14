@@ -46,8 +46,8 @@ public class BackgroundRemovalController {
         Path originalFilePath = tempDir.resolve(originalFileName);
 
         long currentTime = System.currentTimeMillis();
-        long maxAgeInSeconds = 60 * 60; // 60 minute (60 seconds)
-        long expirationTime = currentTime + (maxAgeInSeconds * 1000); // 60 minute in milliseconds
+        long maxAgeInSeconds = 60 * 60; // 60 minutes (60 seconds)
+        long expirationTime = currentTime + (maxAgeInSeconds * 1000); // 60 minutes in milliseconds
 
         return filePart
             .transferTo(originalFilePath)

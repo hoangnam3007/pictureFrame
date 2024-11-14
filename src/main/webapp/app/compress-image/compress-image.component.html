@@ -1,15 +1,72 @@
-<div class="row flex-ali-it-cen mb-5" data-selected="true" data-label-id="0" data-metatip="true">
-  <div class="col-md-6 tool-title">
-    <img src="https://khunghinh.net/img/tool/zframe-designer-working-happily.png" atl="zFrame Tool" />
-    <h1 class="title text-center py-2">Nén hình ảnh</h1>
-  </div>
-  <div class="col-md-6 tool-form">
-    <div class="tool-area py-6">
-      <input type="file" id="upload_photo" accept="image/png" />
-      <div class="btn-group-center">
-        <button class="btn btn-primary rounded-pill ms-1 btn-upload-image" onclick="OnChoosePhoto()">Chọn hình</button>
+<div class="row py-6">
+  <div class="col-md-12">
+    <div class="row flex-ali-it-cen mb-5" data-selected="true" data-label-id="0" data-metatip="true">
+      <div class="col-md-6 tool-title">
+        <img src="https://khunghinh.net/img/tool/zframe-designer-working-happily.png" alt="zFrame Tool" />
+        <h1 class="title text-center py-2">Nén hình ảnh</h1>
       </div>
-      <span class="waiting-text text-center d-block pt-3">Hỗ trợ định dạng hình PNG</span>
+      <div class="col-md-6 tool-form">
+        <div class="tool-area py-6">
+          <div class="btn-group-center">
+            <!-- Hidden file input with a template reference variable -->
+            <input
+              type="file"
+              #fileInput
+              accept="image/jpg, image/jpeg"
+              (change)="onChoosePhoto($event, compressionQuality)"
+              style="display: none"
+            />
+            <button class="btn btn-primary rounded-pill ms-1 btn-upload-image" (click)="fileInput.click()">Chọn hình</button>
+          </div>
+          <span class="waiting-text text-center d-block pt-3">Hỗ trợ định dạng hình PNG</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8 offset-md-2" *ngIf="checkUpload">
+    <!-- Total Image Compression Summary -->
+    <div id="image-total" class="mt-3 py-3 gradient-7 hide" style="display: flex">
+      <div class="percent-total px-2 ms-3">-{{ 100 - (compressionQuality ?? 0) }}%</div>
+      <div class="size-total ms-3">
+        Tổng dung lượng giảm
+        <span>{{ ((sizeFile ?? 0) * (compressionQuality ?? 0)) / 100 | number: '1.2-2' }} KB</span>
+      </div>
+      <button class="btn btn-success btn-download-all rounded-pill ms-auto me-3 hide-mobile">
+        <i class="fa-solid fa-file-arrow-down me-1"></i>Tải tất cả
+      </button>
+    </div>
+
+    <!-- Compressed Image Preview List -->
+    <div id="image-list" class="mt-4">
+      <div class="mb-3 p-2 upload-item">
+        <img class="upload-img" [src]="imgResultAfterCompression" alt="Compressed Image Preview" />
+        <div class="upload-info mx-3">
+          <span class="file-name">{{ fileName }}</span>
+          <div class="display-flex flex-ali-it-cen">
+            <span class="file-type px-1">jpg</span>
+            <span class="file-size ms-2">{{ sizeFile }} KB</span>
+          </div>
+        </div>
+        <div class="ms-auto download-group">
+          <button class="btn btn-config hover-top p-0 me-2" (click)="settingSize()">
+            <i class="fa-solid fa-gear m-2"></i>
+          </button>
+
+          <button class="btn btn-success btn-download p-0" (click)="downloadFile()">
+            <div class="compress-info p-2">
+              <!-- Display the percentage reduction, with a default of 0% if compressionQuality is null -->
+              <span class="percent-reduce form-label">-{{ 100 - (compressionQuality ?? 0) }}%</span>
+
+              <!-- Calculate and display the compressed file size, with a default size of 0 KB if sizeFile is null -->
+              <span class="new-size"> {{ ((sizeFile ?? 0) * (compressionQuality ?? 0)) / 100 | number: '1.2-2' }} KB </span>
+            </div>
+            <div class="compress-type px-2">
+              <i class="fa-solid fa-file-arrow-down"></i>
+              <span>jpg</span>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -3,7 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { ResponseImageDTO, ImageService } from './remove-background.service';
 import { finalize } from 'rxjs/operators';
-
+import Swal from 'sweetalert2';
 @Component({
   standalone: true,
   templateUrl: './remove-background.component.html',
@@ -12,6 +12,7 @@ import { finalize } from 'rxjs/operators';
 })
 export class RemoveBackgroundComponent implements OnInit, OnDestroy {
   imageUploaded = false;
+  showOriginal = true; // State variable to manage which image to display
   originalImagePath: string | null = null;
   removedImagePath: string | null = null;
   selectedFile: File | null = null;
@@ -62,25 +63,44 @@ export class RemoveBackgroundComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  showImage(type: string): void {
+    this.showOriginal = type === 'original';
+  }
+
   tryAnotherImage(): void {
     if (this.imageUploaded) {
-      this.loading = true;
-      this.imageService
-        .deleteImage()
-        .pipe(
-          finalize(() => {
-            this.loading = false;
-          }),
-        )
-        .subscribe({
-          next: () => {
-            this.resetState();
-          },
-          error: (error: Error) => {
-            this.errorMessage = error.message;
-          },
-        });
+      // Show confirmation dialog
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You wont be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then(result => {
+        if (result.isConfirmed) {
+          // Only proceed with deletion if user confirmed
+          this.loading = true;
+          this.imageService
+            .deleteImage()
+            .pipe(
+              finalize(() => {
+                this.loading = false;
+              }),
+            )
+            .subscribe({
+              next: () => {
+                this.resetState();
+              },
+              error: (error: Error) => {
+                this.errorMessage = error.message;
+              },
+            });
+        }
+      });
     } else {
+      // If no image is uploaded, simply reset the state without confirmation
       this.resetState();
     }
   }
@@ -90,10 +110,23 @@ export class RemoveBackgroundComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
   }
 
+  // Method to download the removed image
+  downloadRemovedImage(): void {
+    if (this.removedImagePath) {
+      const link = document.createElement('a');
+      link.href = this.removedImagePath;
+      link.download = 'removed-image.jpg';
+      link.click();
+    } else {
+      this.errorMessage = 'Removed image not available for download.';
+    }
+  }
+
   private checkExistingImages(): void {
     this.originalImagePath = this.imageService.getOriginalImagePathFromCookie();
     this.removedImagePath = this.imageService.getRemovedImagePathFromCookie();
     this.imageUploaded = !!(this.originalImagePath && this.removedImagePath);
+    this.showOriginal = true; // Default to showing the original image if available
   }
 
   private uploadImage(file: File): void {
@@ -112,10 +145,12 @@ export class RemoveBackgroundComponent implements OnInit, OnDestroy {
           this.originalImagePath = response.originalImageUrl;
           this.removedImagePath = response.removedImageUrl;
           this.imageUploaded = true;
+          this.showOriginal = true; // Show original image after upload
         },
         error: (error: Error) => {
           this.errorMessage = error.message;
           this.clearSelection();
+          this.loading = false;
         },
       });
   }
@@ -126,5 +161,6 @@ export class RemoveBackgroundComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
     this.originalImagePath = null;
     this.removedImagePath = null;
+    this.showOriginal = true;
   }
 }

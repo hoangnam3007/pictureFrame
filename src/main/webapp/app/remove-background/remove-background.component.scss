@@ -112,3 +112,211 @@ h1 {
 .twentytwenty-wrapper {
   margin-left: 80px;
 }
+
+.row.align-items-center.mt-5 {
+  padding: 0px 60px;
+  margin-bottom: 100px;
+}
+
+.title {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif; /* Font family */
+  font-size: 28.83px; /* Font size */
+  font-weight: 600; /* Font weight */
+  color: #14183e; /* Text color */
+  line-height: 34.6px; /* Line height */
+  text-align: center; /* Center the text */
+  margin: 0px 0px 8px 0px; /* Margin for top, right, bottom, and left */
+  padding: 0px 16px 40px; /* Padding for top, right/left, and bottom */
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Make sure it covers everything */
+}
+
+.spinner-container {
+  text-align: center;
+  color: white;
+}
+
+.spinner {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 15px;
+}
+
+.rm-bg-result-area {
+  background-image: url('https://khunghinh.net/img/pixel.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px; /* Adjust based on your layout */
+  border: 2px dashed #0000001a;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.rm-bg-img-input img,
+.rm-bg-img-output img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Ensure the image scales properly within the container */
+  display: block;
+}
+/* Styling for the nav-tabs container to align horizontally at the top-left */
+.nav-tabs {
+  display: flex;
+  justify-content: flex-start; /* Align tabs to the left */
+  align-items: center;
+  border-bottom: none; /* Remove the default border */
+  padding-left: 0;
+  margin-top: 10px; /* Space from top content */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  margin-bottom: -30px;
+}
+
+/* Styling for each nav-item */
+.nav-item {
+  margin-right: 5px; /* Reduce space between the tabs */
+}
+
+/* Styling for each nav-link (tab button) */
+.nav-link {
+  background-color: #f8f9fa; /* Light background */
+  color: #333; /* Darker text */
+  border: 1px solid #e1eaed; /* Light border */
+  border-radius: 6px; /* Slightly rounded corners */
+  padding: 6px 12px; /* Reduced padding for compact size */
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif; /* Font family */
+  font-size: 14px; /* Smaller font size */
+  font-weight: 600; /* Semi-bold font */
+  transition:
+    background-color 0.3s,
+    color 0.3s; /* Smooth transition */
+  cursor: pointer;
+}
+
+/* Active tab styling */
+.nav-link.active {
+  background-color: #ff7f50; /* Highlight color for active tab */
+  color: #fff; /* White text for contrast */
+  border-color: #ff7f50; /* Matching border color */
+}
+
+/* Hover effect for nav-links */
+.nav-link:hover {
+  background-color: #ddd; /* Light grey on hover */
+  color: #000; /* Darker text */
+}
+
+/* Styling for container holding the tabs and images */
+.rm-bg-result-area {
+  display: flex;
+  flex-direction: column; /* Arrange items vertically */
+  align-items: flex-start; /* Align items to the left */
+  justify-content: center; /* Center items vertically */
+  background-image: url('https://khunghinh.net/img/pixel.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: auto; /* Auto-adjust height */
+  border: 2px dashed #0000001a;
+  border-radius: 15px;
+  padding: 15px; /* Smaller padding for compact look */
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+/* Container for the images to keep everything aligned properly */
+.rm-bg-result-area {
+  background-image: url('https://khunghinh.net/img/pixel.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column; /* Arrange items vertically */
+  align-items: center; /* Align items to the left */
+  justify-content: center; /* Align items from the top */
+  height: auto; /* Auto-adjust height */
+  border: 2px dashed #0000001a;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.btn-download {
+  background-color: #e04826; /* Match the orange-red color */
+  color: #fff; /* White text */
+  border: none; /* Remove any default border */
+  padding: 5px 40px; /* Padding for consistent size */
+  font-size: 16px; /* Set a font size */
+  text-align: center;
+  display: block;
+  margin: 0 auto; /* Center horizontally */
+  transition:
+    background-color 0.3s,
+    transform 0.3s; /* Smooth transition */
+}
+
+.btn-download:hover {
+  background-color: #d04220; /* Slightly darker shade for hover */
+  transform: translateY(-2px); /* Lift effect on hover */
+}
+
+.btn-download:active {
+  background-color: #c0392b; /* Darker shade for active state */
+  transform: translateY(1px); /* Slight press effect */
+}
+
+.action-area {
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  background-image: url('https://khunghinh.net/img/pixel.png');
+  background-position: center center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+/* Danger button (for "Thử lại hình khác") */
+.btn-danger {
+  background-color: #be5942;
+  border-color: #ff7f50;
+  color: #ffffff;
+  padding: 0.6rem 1.8rem;
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+}
+
+.btn-danger:hover {
+  background-color: #e36846;
+  border-color: #e36846;
+}
+
+/* Center alignment for the try-again button */
+.btn-center {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: fit-content; /* Ensures button doesn't stretch */
+}
+
+/* Styling the action-area */
+.action-area {
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  background-image: url('https://khunghinh.net/img/pixel.png');
+  background-position: center center;
+  padding: 20px;
+}

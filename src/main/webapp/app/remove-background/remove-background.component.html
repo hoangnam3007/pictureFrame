@@ -1,24 +1,28 @@
-<!-- Image Upload Section (only visible when image isn't uploaded) -->
-<div class="container remove-bg-container mt-3" style="margin-top: 100px" *ngIf="!imageUploaded">
+<!-- Full-Screen Loading Overlay -->
+<div *ngIf="loading" class="loading-overlay">
+  <div class="spinner-container">
+    <img src="/content/images/icon/loading.gif" alt="Loading..." class="spinner" />
+    <p>Loading, please wait...</p>
+  </div>
+</div>
+
+<!-- Image Upload Section (only visible when the image isn't uploaded) -->
+<div class="container remove-bg-container mt-3" *ngIf="!imageUploaded">
   <div class="row remove-bg-start px-3 mx-0">
     <!-- Left section (Image and Title) -->
     <div class="col-md-6 remove-bg-title text-center">
       <img src="https://khunghinh.net/img/tool/rmbg_3.png" class="img-fluid mx-auto d-block" alt="Image to remove background" />
       <h1 class="title text-center py-4">Xóa nền hình ảnh</h1>
     </div>
-
     <!-- Right section (File upload area) -->
     <div class="col-md-6 remove-bg-form">
       <div class="remove-bg-area py-6 text-center">
         <!-- Hidden File Input -->
         <input type="file" #fileInput accept="image/*" style="display: none" (change)="onChoosePhoto($event)" />
-
         <!-- Button to trigger the file input click -->
         <button class="btn btn-primary rounded-pill btn-upload-image d-block mx-auto" (click)="fileInput.click()">Chọn Hình</button>
-
-        <!-- Display error message -->
+        <!-- Display message -->
         <span class="waiting-text text-center pt-3 d-block">Hỗ trợ định dạng hình JPG/PNG và dung lượng tối đa là 5MB!</span>
-
         <!-- Display error message if there is one -->
         <div *ngIf="errorMessage" class="alert alert-danger mt-2">{{ errorMessage }}</div>
       </div>
@@ -26,6 +30,68 @@
   </div>
 </div>
 
+<div class="container mt-5" *ngIf="imageUploaded">
+  <h1 class="title text-center pb-5">Xóa nền hình ảnh</h1>
+
+  <!-- Tabs section -->
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-tabs" id="rm_bg_result_tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            [ngClass]="{ active: showOriginal }"
+            (click)="showImage('original')"
+            id="img_input_tab"
+            type="button"
+            role="tab"
+          >
+            Hình Gốc
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            [ngClass]="{ active: !showOriginal }"
+            (click)="showImage('result')"
+            id="img_output_tab"
+            type="button"
+            role="tab"
+          >
+            Hình Kết Quả
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-8 rm-bg-result-area">
+      <div class="tab-content" id="rm_bg_result_tab_content">
+        <!-- Original Image -->
+        <div *ngIf="showOriginal" class="rm-bg-img-input" id="img_input_tab_pane" role="tabpanel">
+          <img [src]="originalImagePath" class="img-fluid" alt="Original Image" />
+        </div>
+        <!-- Result Image -->
+        <div *ngIf="!showOriginal" class="rm-bg-img-output" id="img_output_tab_pane" role="tabpanel">
+          <img [src]="removedImagePath" class="img-fluid" alt="Background Removed Image" />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="action-area py-3 processing" style="display: block">
+        <div class="action-area-status rm-bg-done" style="display: block">
+          <button class="btn btn-download btn-lg rounded-pill hover-top mb-3" (click)="downloadRemovedImage()">Tải hình</button>
+          <span class="waiting-text py-3 text-center d-block">Vui lòng tải hình ảnh, dữ liệu chỉ lưu tạm trong 60 phút.</span>
+        </div>
+      </div>
+      <div class="rm-bg-try-again mt-4">
+        <button class="btn btn-danger btn-lg rounded-pill btn-center" (click)="tryAnotherImage()">Thử lại hình khác</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Inserted Demo Section -->
 <div class="pt-6 rm-bg-demo">
   <h2 class="fs-5 fw-bold text-center">Chất lượng kết quả</h2>
@@ -35,19 +101,6 @@
         <img class="img-demo-src twentytwenty-before" src="https://khunghinh.net/img/tool/rmbg_demo_result_1.png" alt="Demo Image" />
       </div>
     </div>
-  </div>
-</div>
-
-<!-- Result Section (only visible when image is uploaded and processed) -->
-<div class="row align-items-center mt-5" *ngIf="imageUploaded">
-  <div class="col-md-6">
-    <h2 class="fs-5 fw-bold text-center">Kết quả hình ảnh</h2>
-    <img [src]="originalImagePath" class="img-fluid" alt="Original Image" />
-    <h2 class="fs-5 fw-bold text-center mt-3">Hình ảnh đã xóa nền</h2>
-    <img [src]="removedImagePath" class="img-fluid" alt="Background Removed Image" />
-  </div>
-  <div class="col-md-6">
-    <button class="btn btn-secondary" (click)="tryAnotherImage()">Thử lại hình khác</button>
   </div>
 </div>
 

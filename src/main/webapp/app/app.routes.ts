@@ -48,6 +48,11 @@ const routes: Routes = [
     loadComponent: () => import('./compress-image/compress-image.component').then(m => m.CompressImageComponent),
     title: 'compress-image.title',
   },
+  {
+    path: 'resize-image',
+    loadComponent: () => import('./resize-image/resize-image.component').then(m => m.ResizeImageComponent),
+    title: 'resize-image.title',
+  },
   ...errorRoute,
 ];
 

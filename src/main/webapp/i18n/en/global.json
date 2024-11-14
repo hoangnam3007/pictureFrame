@@ -154,5 +154,8 @@
   "compress-image": {
     "title": "compress-image"
   },
+  "resize-image": {
+    "title": "resize-image"
+  },
   "footer": "This is your footer"
 }
