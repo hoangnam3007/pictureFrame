@@ -311,6 +311,11 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
+    @Transactional
+    public Mono<User> getUserById(Long id) {
+        return userRepository.findOneById(id);
+    }
+
     /**
      * Not activated users should be automatically deleted after 3 days.
      * <p>

@@ -1,5 +1,6 @@
 package com.demo.service;
 
+import com.demo.domain.Frame;
 import com.demo.repository.FrameRepository;
 import com.demo.service.dto.FrameDTO;
 import com.demo.service.mapper.FrameMapper;
@@ -23,10 +24,12 @@ public class FrameService {
     private final FrameRepository frameRepository;
 
     private final FrameMapper frameMapper;
+    private final UserService userService;
 
-    public FrameService(FrameRepository frameRepository, FrameMapper frameMapper) {
+    public FrameService(FrameRepository frameRepository, FrameMapper frameMapper, UserService userService) {
         this.frameRepository = frameRepository;
         this.frameMapper = frameMapper;
+        this.userService = userService;
     }
 
     /**
@@ -94,8 +97,8 @@ public class FrameService {
 
     /**
      * Returns the number of frames available.
-     * @return the number of entities in the database.
      *
+     * @return the number of entities in the database.
      */
     public Mono<Long> countAll() {
         return frameRepository.count();
@@ -113,6 +116,16 @@ public class FrameService {
         return frameRepository.findOneWithEagerRelationships(id).map(frameMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public Flux<FrameDTO> getFrameByDate() {
+        LOG.debug("Request to get Frames sorted by updated_at date");
+
+        return frameRepository
+            .getFrameByDate() // Fetch frames sorted by updated_at
+            .flatMap(frame -> enrichFrameWithCreator(frame)) // Enrich each frame with creator details
+            .map(frameMapper::toDto); // Map the enriched Frame entity to FrameDTO
+    }
+
     /**
      * Delete the frame by id.
      *
@@ -122,5 +135,48 @@ public class FrameService {
     public Mono<Void> delete(Long id) {
         LOG.debug("Request to delete Frame : {}", id);
         return frameRepository.deleteById(id);
+    }
+
+    public Mono<FrameDTO> findOneWithGuildeUrl(String url) {
+        LOG.debug("Request to find Frame by guidelineUrl: {}", url);
+        return frameRepository
+            .findByGuidelineUrl(url)
+            .flatMap(frame -> {
+                // Check if creatorId is available and fetch the User entity
+                if (frame.getCreatorId() != null) {
+                    return userService
+                        .getUserById(frame.getCreatorId()) // Assuming userService is available to fetch User
+                        .map(user -> {
+                            // Populate the creator field in Frame
+                            frame.setCreator(user);
+                            // Convert Frame entity to FrameDTO
+                            return frameMapper.toDto(frame);
+                        });
+                } else {
+                    // If creatorId is null, return FrameDTO without a creator
+                    return Mono.just(frameMapper.toDto(frame));
+                }
+            })
+            .switchIfEmpty(Mono.error(new RuntimeException("Frame not found for URL: " + url)));
+    }
+
+    public Mono<Boolean> checkExistById(String url) {
+        LOG.debug("Request to find Frame by guidelineUrl: {}", url);
+        return frameRepository.existsByGuidelineUrl(url);
+    }
+
+    private Mono<Frame> enrichFrameWithCreator(Frame frame) {
+        if (frame.getCreatorId() != null) {
+            // Fetch the creator User and set it in the Frame
+            return userService
+                .getUserById(frame.getCreatorId())
+                .map(user -> {
+                    frame.setCreator(user); // Set the creator in the Frame entity
+                    return frame;
+                });
+        } else {
+            // If no creatorId, return the frame as is
+            return Mono.just(frame);
+        }
     }
 }

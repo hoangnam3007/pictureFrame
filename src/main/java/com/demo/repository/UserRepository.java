@@ -33,6 +33,7 @@ public interface UserRepository extends R2dbcRepository<User, Long>, UserReposit
     Flux<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime dateTime);
 
     Mono<User> findOneByResetKey(String resetKey);
+    Mono<User> findOneById(Long id);
 
     Mono<User> findOneByEmailIgnoreCase(String email);
 

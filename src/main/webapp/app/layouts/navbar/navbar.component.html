@@ -23,6 +23,16 @@
             </span>
           </a>
         </li>
+
+        <li *jhiHasAnyAuthority="'ROLE_USER'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" routerLink="/create-frame" (click)="collapseNavbar()">
+            <span>
+              <i class="fa-solid fa-square-plus"></i>
+              <span jhiTranslate="global.menu.entities.create">Create</span>
+            </span>
+          </a>
+        </li>
+
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown

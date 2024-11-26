@@ -9,6 +9,7 @@ import { IUser } from '../user.model';
 
 export type EntityResponseType = HttpResponse<IUser>;
 export type EntityArrayResponseType = HttpResponse<IUser[]>;
+import { map } from 'rxjs/operators'; // Import the map operator
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -16,9 +17,13 @@ export class UserService {
   protected applicationConfigService = inject(ApplicationConfigService);
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/users');
-
+  protected getUserUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<IUser>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  getUserByLogin(login: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.getUserUrl}/${login}`, { observe: 'response' }).pipe(map(response => response.body!));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

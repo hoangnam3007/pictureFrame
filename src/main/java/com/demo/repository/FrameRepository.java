@@ -31,6 +31,12 @@ public interface FrameRepository extends ReactiveCrudRepository<Frame, Long>, Fr
     @Query("SELECT * FROM frame entity WHERE entity.creator_id IS NULL")
     Flux<Frame> findAllWhereCreatorIsNull();
 
+    @Query("SELECT * FROM frame WHERE guideline_url = :url")
+    Mono<Frame> findByGuidelineUrl(String url);
+
+    @Query("SELECT * FROM frame ORDER BY updated_at DESC LIMIT 3")
+    Flux<Frame> getFrameByDate();
+
     @Override
     <S extends Frame> Mono<S> save(S entity);
 
@@ -42,6 +48,9 @@ public interface FrameRepository extends ReactiveCrudRepository<Frame, Long>, Fr
 
     @Override
     Mono<Void> deleteById(Long id);
+
+    @Override
+    Mono<Boolean> existsByGuidelineUrl(String url);
 }
 
 interface FrameRepositoryInternal {
@@ -62,4 +71,8 @@ interface FrameRepositoryInternal {
     Flux<Frame> findAllWithEagerRelationships(Pageable page);
 
     Mono<Void> deleteById(Long id);
+
+    Mono<Frame> findByGuidelineUrl(String url);
+
+    Mono<Boolean> existsByGuidelineUrl(String url);
 }

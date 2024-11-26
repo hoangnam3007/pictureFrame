@@ -116,4 +116,21 @@ class FrameRepositoryInternalImpl extends SimpleR2dbcRepository<Frame, Long> imp
     public <S extends Frame> Mono<S> save(S entity) {
         return super.save(entity);
     }
+
+    @Override
+    public Mono<Frame> findByGuidelineUrl(String url) {
+        Comparison whereClause = Conditions.isEqual(entityTable.column("guideline_url"), Conditions.just(url));
+        return createQuery(null, whereClause).one();
+    }
+
+    @Override
+    public Mono<Boolean> existsByGuidelineUrl(String url) {
+        // Build the condition for guideline_url
+        Comparison whereClause = Conditions.isEqual(entityTable.column("guideline_url"), Conditions.just("'" + url + "'"));
+
+        // Use createQuery to check existence
+        return createQuery(null, whereClause)
+            .one() // Fetch one result
+            .hasElement(); // Check if an element exists
+    }
 }

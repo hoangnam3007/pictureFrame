@@ -79,7 +79,7 @@ public class FrameResource {
     /**
      * {@code PUT  /frames/:id} : Updates an existing frame.
      *
-     * @param id the id of the frameDTO to save.
+     * @param id       the id of the frameDTO to save.
      * @param frameDTO the frameDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated frameDTO,
      * or with status {@code 400 (Bad Request)} if the frameDTO is not valid,
@@ -120,7 +120,7 @@ public class FrameResource {
     /**
      * {@code PATCH  /frames/:id} : Partial updates given fields of an existing frame, field will ignore if it is null
      *
-     * @param id the id of the frameDTO to save.
+     * @param id       the id of the frameDTO to save.
      * @param frameDTO the frameDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated frameDTO,
      * or with status {@code 400 (Bad Request)} if the frameDTO is not valid,
@@ -163,8 +163,8 @@ public class FrameResource {
     /**
      * {@code GET  /frames} : get all the frames.
      *
-     * @param pageable the pagination information.
-     * @param request a {@link ServerHttpRequest} request.
+     * @param pageable  the pagination information.
+     * @param request   a {@link ServerHttpRequest} request.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of frames in body.
      */
@@ -221,5 +221,36 @@ public class FrameResource {
                         .build()
                 )
             );
+    }
+
+    @GetMapping("/search")
+    public Mono<ResponseEntity<FrameDTO>> getFrameWithGuidelineUrl(@RequestParam("guidelineUrl") String guidelineUrl) {
+        return frameService
+            .findOneWithGuildeUrl(guidelineUrl)
+            .map(ResponseEntity::ok)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Frame not found")));
+    }
+
+    @GetMapping("/getFrameNearest")
+    public Mono<ResponseEntity<List<FrameDTO>>> getFrameFollowDate() {
+        LOG.debug("REST request to get a Frame which is nearest follow date");
+        return frameService
+            .getFrameByDate()
+            .collectList()
+            .map(frames -> {
+                if (frames.isEmpty()) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Frame not found");
+                }
+                return ResponseEntity.ok(frames);
+            })
+            .onErrorMap(ex -> {
+                LOG.error("Error fetching nearest frames: {}", ex.getMessage(), ex);
+                return new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch frames", ex);
+            });
+    }
+
+    @GetMapping("/checkExistUrl")
+    public Mono<Boolean> checkCondition(@RequestParam String url) {
+        return frameService.checkExistById(url);
     }
 }

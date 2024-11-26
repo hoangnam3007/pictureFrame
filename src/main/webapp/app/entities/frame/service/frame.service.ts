@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 import dayjs from 'dayjs/esm';
@@ -16,6 +16,11 @@ type RestOf<T extends IFrame | NewFrame> = Omit<T, 'createdAt' | 'updatedAt'> & 
   updatedAt?: string | null;
 };
 
+export interface ImageDTO {
+  id: number;
+  imageUrl: string;
+}
+
 export type RestFrame = RestOf<IFrame>;
 
 export type NewRestFrame = RestOf<NewFrame>;
@@ -23,6 +28,7 @@ export type NewRestFrame = RestOf<NewFrame>;
 export type PartialUpdateRestFrame = RestOf<PartialUpdateFrame>;
 
 export type EntityResponseType = HttpResponse<IFrame>;
+export type EntityImgDTO = HttpResponse<ImageDTO>;
 export type EntityArrayResponseType = HttpResponse<IFrame[]>;
 
 @Injectable({ providedIn: 'root' })
@@ -31,10 +37,42 @@ export class FrameService {
   protected applicationConfigService = inject(ApplicationConfigService);
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/frames');
+  protected resourceImg = this.applicationConfigService.getEndpointFor('api/create-frame/saveImage');
 
   create(frame: NewFrame): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(frame);
     return this.http.post<RestFrame>(this.resourceUrl, copy, { observe: 'response' }).pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
+  getFrameByDate(): Observable<IFrame[]> {
+    const url = `${this.resourceUrl}/getFrameNearest`;
+    return this.http.get<IFrame[]>(url); // Expecting the API to return a list of frames
+  }
+
+  checkExistedByUrl(url: string): Observable<boolean> {
+    const link = `${this.resourceUrl}/checkExistUrl?url=${encodeURIComponent(url)}`;
+    return this.http.get<boolean>(link).pipe(
+      map((response: boolean) => response), // Map the response to a boolean
+    );
+  }
+
+  createFrame(file: File, guidelineUrl: string): Observable<ImageDTO> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Construct the URL with the guidelineUrl as a query parameter
+    const uploadUrl = `${this.resourceImg}?url=${encodeURIComponent(guidelineUrl)}`;
+
+    return this.http.post<ImageDTO>(uploadUrl, formData).pipe(
+      map((response: ImageDTO) => {
+        return response;
+      }),
+    );
+  }
+
+  getFrameByGuidelineUrl(guidelineUrl: string): Observable<IFrame> {
+    const url = `${this.resourceUrl}/search?guidelineUrl=${encodeURIComponent(guidelineUrl)}`;
+    return this.http.get<IFrame>(url);
   }
 
   update(frame: IFrame): Observable<EntityResponseType> {

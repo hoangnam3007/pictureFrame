@@ -11,7 +11,8 @@
         "advertisement": "Advertisement",
         "category": "Category",
         "frame": "Frame",
-        "transaction": "Transaction"
+        "transaction": "Transaction",
+        "create": "Create"
       },
       "account": {
         "main": "Account",
@@ -156,6 +157,12 @@
   },
   "resize-image": {
     "title": "resize-image"
+  },
+  "create-frame": {
+    "title": "create-frame"
+  },
+  "edit-frame": {
+    "title": "edit-frame"
   },
   "footer": "This is your footer"
 }

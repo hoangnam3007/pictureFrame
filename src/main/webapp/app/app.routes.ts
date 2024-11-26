@@ -53,6 +53,16 @@ const routes: Routes = [
     loadComponent: () => import('./resize-image/resize-image.component').then(m => m.ResizeImageComponent),
     title: 'resize-image.title',
   },
+  {
+    path: 'create-frame',
+    loadComponent: () => import('./create-frame/create-frame.component').then(m => m.CreateFrameComponent),
+    title: 'create-frame.title',
+  },
+  {
+    path: 'edit-frame',
+    loadComponent: () => import('./create-frame/edit-frame/edit-frame.component').then(m => m.EditFrameComponent),
+    title: 'edit-frame.title',
+  },
   ...errorRoute,
 ];
 

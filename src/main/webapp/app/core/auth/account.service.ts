@@ -2,7 +2,7 @@ import { Injectable, Signal, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, ReplaySubject, of } from 'rxjs';
+import { Observable, Observer, ReplaySubject, of } from 'rxjs';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
@@ -75,6 +75,10 @@ export class AccountService {
 
   getAuthenticationState(): Observable<Account | null> {
     return this.authenticationState.asObservable();
+  }
+
+  getAccountById(id: number): Observable<Account | null> {
+    return this.http.get<Account | null>(this.applicationConfigService.getEndpointFor(`api/account/getAccountById/${id}`));
   }
 
   private fetch(): Observable<Account> {
