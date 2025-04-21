@@ -1,0 +1,296 @@
+<div class="bg-holder" style="background-image: url(https://khunghinh.net/img/tool/homepage/intersect.svg)"></div>
+<!-- Full-Screen Loading Overlay -->
+<div *ngIf="loading" class="loading-overlay">
+  <div class="spinner-container">
+    <img src="/content/images/icon/loading.gif" alt="Loading..." class="spinner" />
+    <p>Loading, please wait...</p>
+  </div>
+</div>
+<section class="pt-9 pt-md-10">
+  <div class="container-sm px-sm-0 position-relative create-event">
+    <div class="row">
+      <!-- Main Content Area -->
+      <div class="col-lg-8">
+        <h1 class="text-center pt-5 pb-2">Tạo khung có nhiều hình khung</h1>
+        <form [formGroup]="formGroup" (ngSubmit)="save()">
+          <!-- <form method="POST" action="create-event" id="form_event" enctype="multipart/form-data" -->
+          <!-- accept-charset="UTF-8"> -->
+          <div class="row py-3" id="step_1" *ngIf="currentStep == 1">
+            <a class="text-center" href="https://blog.khunghinh.net/2024/09/huong-dan-tao-moi-khung-co-nhieu-hinh.html" target="_blank"
+              >Xem hướng dẫn</a
+            >
+            <h4 class="mt-4 mb-3 text-color-1">Thêm hình khung</h4>
+            <div class="col-12">
+              <ul class="list-unstyled mb-5">
+                <li>Định dạng bắt buộc hình khung là PNG và phải có <strong>vùng trong suốt</strong>.</li>
+                <li>Có thể thêm nhiều hơn 1 hình khung. Tối đa là <strong>5 hình khung</strong>.</li>
+                <li>Kích thước đề xuất là hình vuông cạnh <strong>1080px</strong>.</li>
+                <li>Dung lượng tối đa của hình khung là <strong>2 MB</strong>.</li>
+              </ul>
+            </div>
+            <div class="col-12 mb-6 frame-component">
+              <input class="hide" id="exist_frames" name="exist_frames" />
+              <div class="frame-view mb-4">
+                <img
+                  class="img-fluid img-thumbnail"
+                  alt="frame-view"
+                  crossorigin="anonymous"
+                  [src]="frameImageUrl"
+                  style="display: inline"
+                  *ngIf="checkUpload"
+                />
+                <div class="instruction-note" *ngIf="!checkUpload">
+                  <div class="instruction-content text-center">
+                    <input type="file" #fileInput accept="image/png" (change)="onAddFrame($event)" style="display: none" />
+                    <button class="btn btn-ob btn-lg rounded-pill mb-3 instruction-btn-add-frame" type="button" (click)="fileInput.click()">
+                      <i class="fa-solid fa-file-circle-plus"></i> Thêm hình khung
+                    </button>
+                    <p class="mb-1">định dạng PNG, tối đa 2 MB</p>
+                    <p>kích thước cạnh 1080px.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="add-frame-area mb-3" *ngIf="checkUpload">
+              <div class="frame-list">
+                <div class="item active">
+                  <button class="btn-delete-frame" type="button" (click)="deleteImage()">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                  <img [src]="frameImageUrl" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mb-3">
+              <button class="btn btn-ob btn-lg rounded-pill btn-min-150 btn-next" type="button" (click)="goToStep2()">
+                <i class="fa-solid fa-arrow-right"></i> Tiếp tục
+              </button>
+            </div>
+          </div>
+
+          <div class="row py-3 mt-4" id="step_2" style="display: flex" *ngIf="currentStep == 2">
+            <div class="tab-title">
+              <h4 class="mb-3 text-color-1">Thông tin</h4>
+            </div>
+            <div class="tab-content" id="event-tab-content">
+              <div class="tab-pane fade py-4 show active" id="basic-tab" role="tabpanel" aria-labelledby="basic-tab">
+                <div class="col-12 mb-3">
+                  <div class="row">
+                    <!-- Title -->
+                    <div class="col-md-6 mb-3">
+                      <label for="title" class="form-label">Tiêu đề <span class="required">(*)</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="title"
+                        name="title"
+                        minlength="10"
+                        maxlength="100"
+                        placeholder="Tối thiểu 10 ký tự"
+                        required
+                        formControlName="title"
+                        [(ngModel)]="titleCanvas"
+                        (ngModelChange)="drawImageOnCanvas()"
+                      />
+
+                      <div *ngIf="formGroup.get('title')?.invalid && formGroup.get('title')?.touched" class="text-danger">
+                        <div *ngIf="formGroup.get('title')?.errors?.['required']">Tiêu đề là bắt buộc.</div>
+                        <div *ngIf="formGroup.get('title')?.errors?.['minlength']">Tiêu đề phải ít nhất 10 ký tự.</div>
+                        <div *ngIf="formGroup.get('title')?.errors?.['maxlength']">Tiêu đề không được quá 100 ký tự.</div>
+                      </div>
+                    </div>
+
+                    <!-- Type -->
+                    <div class="col-md-6 mb-3">
+                      <label for="type" class="form-label"> Loại <span class="required text-danger">(*)</span> </label>
+                      <select
+                        class="form-select"
+                        id="type"
+                        name="type"
+                        formControlName="description"
+                        [(ngModel)]="type"
+                        (change)="onTypeChange($event)"
+                      >
+                        <option value="" disabled selected>Chọn...</option>
+                        <option value="Sự kiện">Sự kiện</option>
+                        <option value="Hoạt động">Hoạt động</option>
+                        <option value="Chiến dịch">Chiến dịch</option>
+                        <option value="Lễ hội">Lễ hội</option>
+                        <option value="Khác">Khác</option>
+                      </select>
+
+                      <div *ngIf="formGroup.get('description')?.invalid && formGroup.get('description')?.touched" class="text-danger">
+                        Loại là bắt buộc.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 mb-3">
+                  <label for="visibility2" class="form-label"> Loại hiển thị<span class="required ms-1">(*)</span> </label>
+                  <!-- Công khai -->
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="visibility"
+                      id="visibility2"
+                      value="2"
+                      formControlName="visibility"
+                    />
+                    <label class="form-check-label" for="visibility2">Công khai</label>
+                    <div class="form-text">
+                      Tất cả mọi người đều có thể nhìn thấy. Khung hình có thể xuất hiện ở các trang khác. (ví dụ: Trang "Xu hướng")
+                    </div>
+                  </div>
+                  <!-- Hạn chế -->
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="visibility"
+                      id="visibility1"
+                      value="1"
+                      formControlName="visibility"
+                    />
+                    <label class="form-check-label" for="visibility1">Hạn chế</label>
+                    <div class="form-text">
+                      Chỉ người dùng được chia sẻ đường dẫn mới có thể nhìn thấy. Khung hình không xuất hiện ở các trang khác.
+                    </div>
+
+                    <div *ngIf="formGroup.get('visibility')?.invalid && formGroup.get('visibility')?.touched" class="text-danger">
+                      Loại hiển thị là bắt buộc.
+                    </div>
+                  </div>
+                  <!-- Riêng tư -->
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="visibility"
+                      id="visibility0"
+                      value="0"
+                      formControlName="visibility"
+                    />
+                    <label class="form-check-label" for="visibility0">Riêng tư</label>
+                    <div class="form-text">Chỉ mình bạn mới có thể nhìn thấy.</div>
+                  </div>
+                  <div class="invalid-feedback">Yêu cầu chọn loại hiển thị</div>
+                </div>
+
+                <div class="col-12 mb-3 slug-component verified">
+                  <label for="slug" class="form-label">Đường dẫn (URL)</label>
+                  <div class="mb-3 position-relative">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="slug"
+                      name="slug"
+                      minlength="8"
+                      maxlength="100"
+                      aria-describedby="slug-addon"
+                      placeholder="duong-dan-khung-hinh"
+                      value=""
+                      formControlName="guidelineUrl"
+                    />
+
+                    <div *ngIf="formGroup.get('guidelineUrl')?.invalid && formGroup.get('guidelineUrl')?.touched" class="text-danger">
+                      <div *ngIf="formGroup.get('guidelineUrl')?.errors?.['required']">Đường dẫn là bắt buộc.</div>
+
+                      <div *ngIf="formGroup.get('guidelineUrl')?.errors?.['maxlength']">Đường dẫn không được quá 100 ký tự.</div>
+                      <div *ngIf="formGroup.get('guidelineUrl')?.errors?.['urlExist']">URL đã tồn tại.</div>
+                    </div>
+                  </div>
+                  <div class="invalid-feedback"></div>
+                  <div class="form-text slug-link">https://khunghinh.net/p/duong-dan-khung-hinh</div>
+                  <div class="form-text">Đường dẫn để chia sẻ, độ dài từ 8 đến 100 ký tự.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-5">
+              <input id="input-frame-url" class="input-frame-url hide" name="frame_urls" type="text" />
+              <button class="btn btn-ob btn-lg rounded-pill btn-min-150 btn-back" type="button" (click)="goBackStep1()">
+                <i class="fa-solid fa-arrow-left me-1"></i>
+                Quay lại
+              </button>
+              <button
+                class="btn btn-ob btn-primary btn-lg rounded-pill btn-submit-form-event btn-min-150 btn-next"
+                type="button"
+                (click)="save()"
+              >
+                <i class="fa-solid fa-square-arrow-up-right me-1"></i>Tạo khung hình
+              </button>
+            </div>
+          </div>
+        </form>
+        <hr />
+        <h3 class="header my-4">Khung hình gần đây</h3>
+        <div class="row recent-frames" *ngIf="frames.length > 0">
+          <div class="col-lg-4 col-6 pb-4" *ngFor="let frame of frames">
+            <div class="frame-item shadow">
+              <a class="frame-img-link" [href]="'http://localhost:9000/edit-frame?guidelineUrl=' + frame.guidelineUrl">
+                <div class="frame-img-area">
+                  <img class="frame-img" src="{{ frame.imagePath }}" crossorigin="anonymous" />
+                </div>
+              </a>
+              <div class="frame-info p-3" data-slug="1" data-premium="0" data-title="1">
+                <h2 class="mb-2 frame-link">
+                  <a class="frame-link" [href]="'http://localhost:9000/edit-frame?guidelineUrl=' + frame.guidelineUrl">{{ frame.title }}</a>
+                </h2>
+                <div class="created-time"><i class="fa-regular fa-clock me-1"></i>{{ frame.updatedAt }}</div>
+                <div class="action-list">
+                  <a class="btn btn-ob btn-sm mt-2" (click)="onEditFrame(frame.guidelineUrl!)" href="javascript:void(0)">Sửa</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Area -->
+      <div class="col-lg-4">
+        <div id="event-preview" class="event-preview py-3 sticky-sidebar">
+          <div class="event-preview-box iphone-box py-5">
+            <!--Input from Form -->
+            <div class="event-header mb-4">
+              <div class="row event-header-default mx-0">
+                <!-- Badge for Event Type -->
+                <span
+                  class="badge rounded-pill event-type frame-type fw-bold w-auto mx-auto"
+                  [ngStyle]="{ 'background-color': selectedTypeColor }"
+                  [ngClass]="typeClass"
+                >
+                  {{ selectedTypeText }}
+                </span>
+                <h2 class="text-center preview-title">{{ titleCanvas }}</h2>
+              </div>
+            </div>
+
+            <div class="image-editor mb-5">
+              <div class="image-editor-step hide mb-3">
+                <div class="progress">
+                  <div
+                    class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                    role="progressbar"
+                    aria-label="create new event"
+                    style="width: 25%"
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+              <div class="area_process">
+                <div class="area_frame common-area" style="height: 203.297px">
+                  <canvas #previewCanvas id="previewCanvas" width="500" height="500"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

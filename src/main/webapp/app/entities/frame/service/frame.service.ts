@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { HttpClient, HttpResponse, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 import dayjs from 'dayjs/esm';
-
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
@@ -38,7 +37,7 @@ export class FrameService {
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/frames');
   protected resourceImg = this.applicationConfigService.getEndpointFor('api/create-frame/saveImage');
-
+  protected resourceImgNew = this.applicationConfigService.getEndpointFor('api/create-frame');
   create(frame: NewFrame): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(frame);
     return this.http.post<RestFrame>(this.resourceUrl, copy, { observe: 'response' }).pipe(map(res => this.convertResponseFromServer(res)));
@@ -70,6 +69,21 @@ export class FrameService {
     );
   }
 
+  updateFrame(file: File, guidelineUrl: string, existingFileName: string): Observable<ImageDTO> {
+    const formData = new FormData();
+    formData.append('file', file); // Append the file
+
+    // Construct the URL with query parameters for guidelineUrl and existingFileName
+    const uploadUrl = `${this.resourceImgNew}/updateImage?url=${encodeURIComponent(guidelineUrl)}&existingFileName=${encodeURIComponent(existingFileName)}`;
+
+    // Make the POST request to the updated URL with the form data
+    return this.http.post<ImageDTO>(uploadUrl, formData).pipe(
+      map((response: ImageDTO) => {
+        return response; // Return the ImageDTO response
+      }),
+    );
+  }
+
   getFrameByGuidelineUrl(guidelineUrl: string): Observable<IFrame> {
     const url = `${this.resourceUrl}/search?guidelineUrl=${encodeURIComponent(guidelineUrl)}`;
     return this.http.get<IFrame>(url);
@@ -80,6 +94,11 @@ export class FrameService {
     return this.http
       .put<RestFrame>(`${this.resourceUrl}/${this.getFrameIdentifier(frame)}`, copy, { observe: 'response' })
       .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
+  deleteUrl(guidelineUrl: string): Observable<any> {
+    const url = `${this.resourceImgNew}/deleteUrl?url=${encodeURIComponent(guidelineUrl)}`;
+    return this.http.delete<any>(url).pipe(catchError(this.handleError));
   }
 
   partialUpdate(frame: PartialUpdateFrame): Observable<EntityResponseType> {
@@ -160,5 +179,9 @@ export class FrameService {
     return res.clone({
       body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
     });
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    return throwError(() => new Error('Something went wrong!'));
   }
 }

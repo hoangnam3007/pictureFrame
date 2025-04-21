@@ -129,6 +129,9 @@ spring:
         jwt:
           authority-prefix: ''
           authorities-claim-name: auth
+    firebase:
+      credentials:
+        path: file:D:/Assignment/jhipster/PictureFrame/src/main/resources/firebase-service-account.json
   task:
     execution:
       thread-name-prefix: picture-frame-task-

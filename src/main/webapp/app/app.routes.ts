@@ -63,6 +63,16 @@ const routes: Routes = [
     loadComponent: () => import('./create-frame/edit-frame/edit-frame.component').then(m => m.EditFrameComponent),
     title: 'edit-frame.title',
   },
+  {
+    path: 'update-frame',
+    loadComponent: () => import('./create-frame/update-frame/update-frame.component').then(m => m.UpdateFrameComponent),
+    title: 'update-frame.title',
+  },
+  {
+    path: 'frames',
+    loadComponent: () => import('./frames/frames.component').then(m => m.FramesComponent),
+    title: 'frames.title',
+  },
   ...errorRoute,
 ];
 
