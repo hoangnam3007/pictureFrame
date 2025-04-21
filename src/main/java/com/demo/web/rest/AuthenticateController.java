@@ -3,8 +3,11 @@ package com.demo.web.rest;
 import static com.demo.security.SecurityUtils.AUTHORITIES_KEY;
 import static com.demo.security.SecurityUtils.JWT_ALGORITHM;
 
+import com.demo.service.UserService;
+import com.demo.service.dto.LoginTokenDTO;
 import com.demo.web.rest.vm.LoginVM;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.firebase.auth.FirebaseAuth;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.Instant;
@@ -45,11 +48,20 @@ public class AuthenticateController {
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds-for-remember-me:0}")
     private long tokenValidityInSecondsForRememberMe;
 
+    private final FirebaseAuth firebaseAuth;
+    private final UserService userService;
     private final ReactiveAuthenticationManager authenticationManager;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, ReactiveAuthenticationManager authenticationManager) {
+    public AuthenticateController(
+        JwtEncoder jwtEncoder,
+        ReactiveAuthenticationManager authenticationManager,
+        FirebaseAuth firebaseAuth,
+        UserService userService
+    ) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManager = authenticationManager;
+        this.firebaseAuth = firebaseAuth;
+        this.userService = userService;
     }
 
     @PostMapping("/authenticate")
@@ -64,6 +76,39 @@ public class AuthenticateController {
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.setBearerAuth(jwt);
                 return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+            });
+    }
+
+    // New Google Authentication Method
+    @PostMapping("/authenticate/google")
+    public Mono<ResponseEntity<JWTToken>> authorizeGoogle(@Valid @RequestBody Mono<LoginTokenDTO> googleLoginVM) {
+        return googleLoginVM
+            .flatMap(login -> {
+                // Verify Firebase ID Token
+                return Mono.fromCallable(() -> firebaseAuth.verifyIdToken(login.getIdToken())).flatMap(decodedToken -> {
+                    // Extract user information
+                    String email = decodedToken.getEmail();
+
+                    // Find or create user with email and name
+                    return userService
+                        .findOrCreateUserByEmail(email)
+                        .flatMap(user -> {
+                            // Create authentication object
+                            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getLogin(), "Google");
+
+                            // Create JWT token
+                            String jwt = this.createToken(authentication, login.isRememberMe());
+
+                            // Prepare response with JWT token
+                            HttpHeaders httpHeaders = new HttpHeaders();
+                            httpHeaders.setBearerAuth(jwt);
+                            return Mono.just(new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK));
+                        });
+                });
+            })
+            .onErrorResume(ex -> {
+                LOG.error("Google authentication error", ex);
+                return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
             });
     }
 

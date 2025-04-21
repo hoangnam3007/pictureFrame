@@ -344,4 +344,40 @@ public class UserService {
     public Flux<String> getAuthorities() {
         return authorityRepository.findAll().map(Authority::getName);
     }
+
+    public Mono<User> findOrCreateUserByEmail(String email) {
+        return userRepository
+            .findOrCreateUserByEmail(email)
+            .switchIfEmpty(
+                Mono.defer(() -> {
+                    // Create a new user if none is found by email
+                    User newUser = new User();
+                    newUser.setEmail(email);
+                    newUser.setLogin(email.split("@")[0]); // Generate login from email (or full email)
+                    newUser.setActivated(true); // Set the user as activated
+                    newUser.setLangKey("en"); // Default language
+
+                    // Generate and hash password before saving
+                    String password = passwordEncoder.encode(UUID.randomUUID().toString());
+                    newUser.setPassword(password);
+
+                    // Set timestamps and other fields
+                    Instant now = Instant.now();
+                    newUser.setCreatedDate(now);
+                    newUser.setLastModifiedDate(now);
+                    newUser.setCreatedBy("Google"); // Set system or the user who created this
+                    newUser.setLastModifiedBy("User"); // Set system or user
+
+                    // Add Google user authority (e.g., ROLE_USER)
+                    Set<Authority> authorities = new HashSet<>();
+                    return authorityRepository
+                        .findById(AuthoritiesConstants.USER) // Assuming ROLE_USER is used
+                        .map(authorities::add)
+                        .thenReturn(newUser)
+                        .doOnNext(user -> user.setAuthorities(authorities))
+                        .flatMap(this::saveUser) // Save user with authority
+                        .doOnNext(user -> LOG.debug("Created Information for User: {}", user));
+                })
+            );
+    }
 }

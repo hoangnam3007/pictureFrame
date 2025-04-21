@@ -1,0 +1,119 @@
+<div class="bg-holder" style="background-image: url(https://khunghinh.net/img/tool/homepage/intersect.svg)"></div>
+<div class="main-content">
+  <div class="container-sm px-sm-0">
+    <div class="row">
+      <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+        <div class="card card-profile shadow">
+          <div class="card-body pt-4">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card-profile-image d-flex justify-content-center">
+                  <div class="avatar-area">
+                    <img
+                      src="https://lh3.googleusercontent.com/a/ACg8ocLj252b1MuS7ktwbLvxGGLn6R9x3aNyPaveKg1epKc5kiNmVw=s96-c"
+                      class="avatar"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center py-3">
+              <h5 class="header username">Hoang Xuan Nam 24</h5>
+              <div class="d-flex mx-auto w-fit">
+                <a class="btn btn-ob rounded-pill btn-center mt-2" href="/pricing">Kích hoạt Premium</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="card-profile-stats d-flex justify-content-center">
+                  <div>
+                    <span class="heading">{{ totalItems }}</span>
+                    <span class="description">khung hình</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-8 order-xl-1">
+        @if (frames.length === 0) {
+          <div class="alert alert-warning" id="no-result">
+            <span jhiTranslate="pictureFrameApp.frame.home.notFound">No Frames found</span>
+          </div>
+        }
+        <div class="">
+          <div class="card-header bg-white border-0 shadow">
+            <div class="row align-items-center">
+              <div class="col-7">
+                <h3 class="header mb-0">Khung hình</h3>
+              </div>
+              <div class="col-5 text-right">
+                <a href="http://localhost:9000/create-frame" class="btn btn-sm btn-primary rounded-pill w-100px btn-ob">Tạo</a>
+              </div>
+            </div>
+          </div>
+
+          @if (frames && frames.length > 0) {
+            <div class="">
+              <div class="row mt-4 frames-list">
+                @for (frame of frames; track trackId(frame)) {
+                  <div class="col-lg-4 col-6 mb-4">
+                    <div class="frame-item bg-white shadow">
+                      <a class="frame-img-link" [href]="'http://localhost:9000/edit-frame?guidelineUrl=' + frame.guidelineUrl">
+                        <div class="frame-img-area">
+                          <img class="frame-img" [src]="frame.imagePath" crossorigin="anonymous" />
+                        </div>
+                      </a>
+                      <div class="frame-info frame-data">
+                        <h2 class="mb-2 frame-link">
+                          <a class="frame-link" [href]="'http://localhost:9000/edit-frame?guidelineUrl=' + frame.guidelineUrl">{{
+                            frame.title
+                          }}</a>
+                        </h2>
+                        <p class="event-report mb-0">
+                          <i class="fa-solid fa-eye me-1" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="lượt xem"></i
+                          >{{ frame.usageCount }}
+                        </p>
+                        <div class="created-time mb-2">
+                          <i class="fa-regular fa-clock me-1"></i>
+                          {{ frame.updatedAt }}
+                        </div>
+                        <div class="action-list">
+                          <a class="btn btn-ob btn-sm mt-2" (click)="onEditFrame(frame.guidelineUrl!)" href="javascript:void(0)">Sửa</a>
+                          <button class="btn btn-ob btn-outline-danger btn-sm mt-1 float-right" type="button" (click)="delete(frame)">
+                            <i class="fa-solid fa-trash me-0"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        @if (frames && frames.length > 0) {
+          <div class="paging text-center">
+            <div class="d-flex justify-content-center">
+              <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <ngb-pagination
+                [collectionSize]="totalItems"
+                [page]="page"
+                [pageSize]="itemsPerPage"
+                [maxSize]="5"
+                [rotate]="true"
+                [boundaryLinks]="true"
+                (pageChange)="navigateToPage($event)"
+              ></ngb-pagination>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

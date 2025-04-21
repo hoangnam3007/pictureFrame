@@ -164,5 +164,11 @@
   "edit-frame": {
     "title": "edit-frame"
   },
+  "update-frame": {
+    "title": "update-frame"
+  },
+  "frames": {
+    "title": "frames"
+  },
   "footer": "This is your footer"
 }

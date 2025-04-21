@@ -1,0 +1,225 @@
+<section id="khunghinh_tool" class="py-5">
+  <div class="col-12">
+    <div class="row event-header mx-0 mt-2 mb-4">
+      <div data-id="93204" data-title="aaaaaaaaaaaaaaaaaaa" data-slug="birthday3007" class="f-object-data hide"></div>
+      <span
+        class="badge rounded-pill frame-type w-auto mx-auto"
+        [ngStyle]="{ 'background-color': selectedTypeColor }"
+        [ngClass]="typeClass"
+      >
+        {{ selectedTypeText || 'Unknown Type' }}
+      </span>
+
+      <h1 data-id="93204" data-title="aaaaaaaaaaaaaaaaaaa" data-slug="birthday3007" class="title text-center p-3 mb-0">
+        {{ frame?.title }}
+      </h1>
+
+      <p class="text-center font-size-sm event-report">
+        <span class="me-2">
+          <i class="fa-solid fa-eye me-1" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="lượt xem"></i>{{ frame?.usageCount }}
+        </span>
+      </p>
+    </div>
+
+    <div class="frame-workspace w-100 d-flex mb-7">
+      <div class="image-editor">
+        <div class="area_process" style="height: 410px">
+          <div id="frame-container" class="area_frame common-area" style="pointer-events: none; width: 410px; height: 410px">
+            <div class="frame-placeholder" style="display: none"></div>
+            <div class="canvas-container" style="width: 410px; height: 410px; position: relative; user-select: none">
+              <canvas
+                id="le_canvas"
+                width="410"
+                height="410"
+                class="lower-canvas"
+                #previewCanvas
+                style="
+                  display: inline;
+                  position: absolute;
+                  width: 410px;
+                  height: 410px;
+                  left: 0px;
+                  top: 0px;
+                  touch-action: none;
+                  user-select: none;
+                  pointer-events: auto;
+                "
+              >
+              </canvas>
+            </div>
+          </div>
+          <div class="area-result-image common-area" style="width: 410px; height: 410px">
+            <img />
+          </div>
+        </div>
+
+        <div class="step-1 step" *ngIf="checkUpload == false">
+          <label for="upload_photo" id="drop_area" class="p-3 text-center mb-0">
+            <div class="drop-img-upload">
+              <i class="fa-solid fa-cloud-arrow-up icon-upload"></i>
+              <p class="mb-0 mt-2">Click to upload an image</p>
+            </div>
+          </label>
+          <input
+            type="file"
+            id="upload_photo"
+            accept="image/png, image/jpeg, image/jpg"
+            (change)="onAddFrame($event)"
+            style="display: none"
+          />
+        </div>
+        <div class="step-2 step" *ngIf="checkUpload == true && isDownload == false">
+          <div class="frame-property-area property-common-area">
+            <div class="btn-edit-image-group mb-3">
+              <button class="btn btn-sm mw-100px btn-ob" type="button" (click)="onFlipped()">
+                <i class="fa-solid fa-road me-1"></i>Lật hình
+              </button>
+              <button class="btn btn-sm btn-ob float-right" type="button" (click)="onReset()">
+                <i class="fa-solid fa-rotate me-1"></i>Reset
+              </button>
+            </div>
+
+            <div class="image-zoom mb-3">
+              <!-- Zoom Out Button -->
+              <button class="btn btn-ob" type="button" (click)="onZoomOut()">
+                <i class="fa-solid fa-magnifying-glass-minus"></i>
+              </button>
+
+              <input
+                id="zoom-slider"
+                type="range"
+                min="0.1"
+                max="2"
+                step="0.01"
+                [(ngModel)]="scaleFactor"
+                (input)="onZoomChange()"
+                class="slider mx-3"
+                style="width: 313px; height: 21px"
+              />
+
+              <!-- Display Zoom Percentage -->
+              <span>{{ scaleFactor * 100 | number: '1.0-0' }}%</span>
+
+              <!-- Zoom In Button -->
+              <button class="btn btn-ob" type="button" (click)="onZoomIn()">
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+              </button>
+            </div>
+
+            <!-- Rotation Slider -->
+            <div class="image-rotate mb-3">
+              <button class="btn btn-ob" type="button" (click)="onRotateLeft()">
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+              <input
+                id="rotate-slider"
+                type="range"
+                min="0"
+                max="360"
+                step="1"
+                [(ngModel)]="rotateDegree"
+                (input)="onRotateChange()"
+                class="slider mx-3"
+                style="width: 313px; height: 21px"
+              />
+
+              <span>{{ rotateDegree }}°</span>
+              <button class="btn btn-ob" type="button" (click)="onRotateRight()">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+            </div>
+
+            <button class="btn btn-ob change-image-btn" (click)="onChangeImage()" [disabled]="!uploadedImageObj">
+              <i class="fa-solid fa-image me-1"></i>Đổi hình
+            </button>
+            <!-- File Input Element (Hidden) -->
+            <input type="file" accept="image/*" (change)="onAddFrame($event)" style="display: none" #fileInput />
+
+            <button class="btn btn-ob mw-100px next-step-3-btn" (click)="changeStep3()">
+              <i class="fa-solid fa-forward me-1"></i>Tiếp tục
+            </button>
+          </div>
+        </div>
+
+        <div class="step-3 step" *ngIf="currentStep == 3">
+          <button class="btn btn-ob mw-100px back-step-2-btn" (click)="changeStep2()">
+            <i class="fa-solid fa-backward me-1"></i>Quay lại
+          </button>
+
+          <div class="btn-group group-download-btn" role="group" aria-label="Basic example">
+            <button class="btn btn-ob mw-100px" (click)="downloadImage()"><i class="fa-sharp fa-solid fa-download me-1"></i>Tải về</button>
+
+            <div class="btn-group" role="group">
+              <button
+                type="button"
+                class="btn btn-ob btn-dropdown-event-action dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              ></button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li class="event-action-item-save-to-list hide">
+                  <button class="dropdown-item" onclick="SaveToBatchList()">Lưu vào danh sách</button>
+                </li>
+                <li><button class="dropdown-item" onclick="CopyToClipboard()">Sao chép vào bộ nhớ đệm</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="step-4 step" *ngIf="currentStep == 4">
+          <div class="download-instruction hide mb-4">
+            <div class="download-instruction-arrow"></div>
+            <span>Chú ý! Nếu hình không tự động tải. <br />Ấn giữ hình từ 5 giây trở lên để hiển thị tùy chọn tải xuống.</span>
+            <span><br />Hoặc thử tại mini app:</span>
+            <div class="mt-3">
+              <button type="button" class="btn social-btn zalo-share-btn" onclick="shareZalo()">
+                <i class="ob-icon icon-zalo"></i>
+              </button>
+            </div>
+          </div>
+          <button class="btn btn-ob back-step-1-btn" onclick="resetAction()"><i class="fa-solid fa-backward me-1"></i>Tạo lại</button>
+          <button class="btn btn-ob share-fb-btn" onclick="onShowFrameShareModal()">
+            <i class="fa-solid fa-share-nodes me-1"></i>Chia sẻ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-information">
+      <div class="creator-info mb-2">
+        <img class="avatar" src="https://lh3.googleusercontent.com/a/ACg8ocLj252b1MuS7ktwbLvxGGLn6R9x3aNyPaveKg1epKc5kiNmVw=s96-c" />
+        <h2 class="name">
+          {{ getAccount?.login }}
+        </h2>
+      </div>
+      <div class="event-info mb-5">
+        <span class="time text-center font-size-sm"><i class="fa-regular fa-clock me-1"></i>vừa mới đây</span>
+      </div>
+      <div class="event-share-box mb-5">
+        <button
+          class="btn btn-outline-primary btn-center px-3 py-2 mb-4 mb-lg-0 rounded-pill"
+          type="button"
+          onclick="onShowFrameShareModal()"
+        >
+          <i class="fa-solid fa-share-nodes main-color-1 me-2"></i><span class="share-text">{{ getAccount?.login }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="ads-content">
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-4864197262264663"
+        data-ad-slot="9959270674"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+        data-adsbygoogle-status="done"
+        ><iframe id="aswift_0" style="height: 1px !important; max-height: 1px !important; max-width: 1px !important; width: 1px !important"
+          ><iframe id="google_ads_frame0"></iframe></iframe
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,60 @@
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+
+.btn-login-google {
+  background-color: #eb4026;
+  display: inline-flex;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid #e1e6e6;
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
+}
+
+.mt-4 {
+  margin-top: 1.8rem !important;
+}
+
+.btn-login-google .fa {
+  background-color: #e23015;
+}
+
+.btn-login-list .fa {
+  height: 44px;
+  width: 51px;
+  display: block;
+  float: left;
+  text-align: center;
+  line-height: 44px;
+  font-size: 22px;
+}
+
+.fa-brands,
+.fab {
+  font-weight: 400;
+}
+
+.fa-brands,
+.fab {
+  font-family: 'Font Awesome 6 Brands';
+}
+
+.fa,
+.fa-brands {
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+}
+
+.btn-login-list .btn_text {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 10px;
+  width: 100%;
+  line-height: 20px;
+  font-weight: 100;
+  font-size: 18px;
+}

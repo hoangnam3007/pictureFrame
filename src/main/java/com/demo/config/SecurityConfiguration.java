@@ -76,6 +76,7 @@ public class SecurityConfiguration {
                     .pathMatchers("/").permitAll()
                     .pathMatchers("/*.*").permitAll()
                     .pathMatchers("/api/authenticate").permitAll()
+                    .pathMatchers("/api/authenticate/google").permitAll()
                     .pathMatchers("/api/register").permitAll()
                     .pathMatchers("/api/activate").permitAll()
                     .pathMatchers("api/upload-image").permitAll()
